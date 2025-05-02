@@ -1,18 +1,19 @@
 workflows:
-  ios-no-sign:
-    name: Build iOS without code signing
+  ios-unsigned:
+    name: Build gana777 iOS unsigned
     environment:
       flutter: stable
       xcode: latest
-      cocoapods: default
     scripts:
-      - name: Install dependencies
+      - name: Instalando dependencias
+        script: flutter pub get
+      - name: Build iOS sin firma
+        script: flutter build ios --release --no-codesign
+      - name: Empaquetando .ipa
         script: |
-          flutter pub get
-          cd ios
-          pod install
-      - name: Build IPA without code signing
-        script: |
-          flutter build ipa --no-codesign
+          mkdir -p build/ios/ipa/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r gana777.ipa Payload
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/ios/ipa/gana777.ipa
