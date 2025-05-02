@@ -1,0 +1,18 @@
+workflows:
+  ios-no-sign:
+    name: Build iOS without code signing
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: |
+          flutter pub get
+          cd ios
+          pod install
+      - name: Build IPA without code signing
+        script: |
+          flutter build ipa --no-codesign
+    artifacts:
+      - build/ios/ipa/*.ipa
